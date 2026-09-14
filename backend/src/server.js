@@ -19,8 +19,11 @@ const PORT = process.env.PORT || 4000
 // ── Security ──────────────────────────────────────────────────────
 app.use(helmet())
 
+// Clean origin — removes trailing slashes or invisible characters
+const allowedOrigin = (process.env.FRONTEND_URL || 'http://localhost:5173').trim().replace(/\/+$/, '')
+
 app.use(cors({
-  origin:      process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => callback(null, true),
   credentials: true,
   methods:     ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
